@@ -1,0 +1,32 @@
+--Create a crystal shop database
+
+CREATE TABLE Crystals (Id INTEGER PRIMARY KEY, Name TEXT, Attribute TEXT, Price INTEGER, Color TEXT);
+
+INSERT INTO Crystals VALUES
+(1, 'Amazonite', 'Abundance', 13.00, 'Multi-colored'),
+(2, 'Blue Apatite', 'Intuition', 20.00, 'Blue'),
+(3, 'Amethyst', 'Healing', 15.00, 'Purple'),
+(4, 'Tigers Eye', 'Strength', 18.00, 'Multi-colored'),
+(5, 'Obsidian', 'Protection', 20.00, 'Black'),
+(6, 'Selenite', 'Intuition', 15.00, 'White'),
+(7, 'Rose Quartz', 'Healing', 12.00, 'Pink'),
+(8, 'Quartz', 'Healing', 13.00, 'Clear'),
+(9, 'Carnelian', 'Strength', 18.00, 'Red'),
+(10, 'Howlite', 'Healing', 10.00, 'Multi-colored'),
+(11, 'Black Tourmaline', 'Protection', 20.00, 'Black'),
+(12, 'Citrine', 'Abundance', 15.00, 'Yellow'),
+(13, 'Jade', 'Abundance', 13.00, 'Green'),
+(14, 'Lapis Lazuli', 'Intuition', 22.00, 'Blue'),
+(15, 'Labradorite', 'Protection', 17.00, 'Blue');
+
+- Display the database ordered by price
+SELECT * FROM Crystals ORDER BY price;
+
+- What is the average price for all shop items?
+SELECT Round(AVG(Price),2) FROM Crystals;
+
+- How many options are available for each attribute?
+SELECT Attribute, COUNT(*) FROM Crystals GROUP BY Attribute ORDER BY COUNT(*) desc;
+
+- What is the average price of crystals with a 'Healing' attribute?
+SELECT Round(AVG(Price),2) FROM Crystals where Attribute='Healing';

@@ -1,0 +1,89 @@
+-- Dig into data on the American Astronauts from 1959 - Present
+
+/* Source: https://www.kaggle.com/nasa/astronaut-yearbook 
+
+This dataset was published by the National Aeronautics and Space Administration as the "Astronaut Fact Book" (April 2013 edition). 
+Active astronauts' mission names and flight statistics were updated from the NASA website. */
+
+/*#1 What American astronaut has the most space flight hours?*/
+SELECT name, birth_place, Space_flights, Max(Space_Flight_hr), Missions
+FROM astronauts;
+
+/*#2 What astronaut has spent the most time in space?*/
+SELECT name, birth_place, Space_Walks, Max(Space_Walks_hr)
+FROM astronauts;
+
+/*#3 Average Space Flight hours and Total Space Walk hours */
+SELECT ROUND(AVG(Space_Flight_hr)), SUM(Space_Walks_hr) FROM astronauts;
+
+/*#4 Top 5 undergraduate majors for astronauts */
+SELECT undergraduate_major, count(*) as Degree_count 
+FROM astronauts 
+GROUP BY undergraduate_major 
+ORDER BY Count(*) desc 
+LIMIT 5;
+
+/*#5 Top 5 Graduate majors for astronauts */
+SELECT Graduate_Major, count(*) as Degree_count FROM astronauts GROUP BY Graduate_Major 
+HAVING Graduate_Major IS NOT NULL
+ORDER BY Count(*) desc
+LIMIT 5;
+
+/*#6 How many astronauts are currently active?*/
+SELECT count(name) as Total_Count, status
+FROM astronauts
+GROUP BY status
+HAVING status = 'Active';
+
+/*#7 Who is the oldest active astronaut?*/
+SELECT name, gender, status, birth_date, year AS astronaut_start_year FROM astronauts 
+WHERE status = 'Active'
+ORDER BY year
+LIMIT 1;
+
+/*#8 Where do the most female astronauts come from?*/
+SELECT COUNT(gender) AS Female_count, birth_place
+FROM astronauts
+GROUP BY birth_place
+HAVING gender = 'Female' AND Female_count > 3
+ORDER BY Female_count desc; 
+
+
+/*#9 Where do the most male astronauts come from?*/
+SELECT COUNT(gender) AS Male_count, birth_place
+FROM astronauts
+GROUP BY birth_place
+HAVING gender = 'Male' 
+ORDER BY Male_count desc
+LIMIT 3; 
+
+/*#10 What Military branch supplies the most astronauts?*/
+SELECT count(name) AS Astronaut_count,
+    CASE 
+        WHEN military_branch LIKE '%Air Force%' THEN 'Air Force'
+        WHEN military_branch LIKE '%Army%' THEN 'Army'
+        WHEN military_branch LIKE '%Navy%' THEN 'Navy'
+        WHEN military_branch LIKE '%Naval Reserves%' THEN 'Navy'
+        WHEN military_branch LIKE '%Marine%' THEN 'Marines'
+        WHEN military_branch LIKE '%Coast guard%' THEN 'Coast Guard'
+        ELSE 'None'
+    END AS Military_experience
+FROM astronauts
+GROUP BY Military_experience
+HAVING Military_experience IS NOT 'None'
+ORDER BY Astronaut_count desc
+LIMIT 2;
+
+
+/*#11 How many astronauts have died on a mission, and what missions?*/
+SELECT count(name) AS Astronaut_count, death_mission
+FROM astronauts
+GROUP BY death_mission
+HAVING death_mission IS NOT NULL
+ORDER BY Astronaut_count asc;
+
+/*#12 Astronaut crew for the Challenger Mission*/
+SELECT name, gender, birth_place, death_date, death_mission 
+FROM astronauts
+WHERE death_mission LIKE '%Challenger%'
+ORDER BY gender;

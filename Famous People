@@ -1,0 +1,87 @@
+--- Create multiple datasets about the 'Friends' cast, characters and hobbies, and join them together to compare information
+
+CREATE TABLE friends (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    charactername TEXT, 
+    partner_id INTEGER);
+
+INSERT INTO friends (charactername, partner_id)
+VALUES ('Monica Geller', 4);
+INSERT INTO friends (charactername, partner_id) 
+VALUES ('Ross Geller', 3);
+INSERT INTO friends (charactername, partner_id) 
+VALUES ('Rachel Green', 2);
+INSERT INTO friends (charactername, partner_id) 
+VALUES ('Chandler Bing', 1);
+INSERT INTO friends (charactername) 
+VALUES ('Joey Tribbiani');
+INSERT INTO friends (charactername)
+VALUES ('Phoebe Buffay');
+
+CREATE TABLE actors (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    fullname TEXT,
+    spouse TEXT,
+    age INTEGER);
+
+INSERT INTO actors (fullname, age)
+VALUES ('Courteney Cox', 58);
+INSERT INTO actors (fullname, age)
+VALUES ('David Schwimmer', 56);
+INSERT INTO actors (fullname, age)
+VALUES ('Jennifer Aniston', 54);
+INSERT INTO actors (fullname,  age)
+VALUES ('Matthew Perry', 54);
+INSERT INTO actors (fullname, age)
+VALUES ('Matt LeBlanc', 55);
+INSERT INTO actors (fullname, spouse, age)
+VALUES ('Lisa Kudrow', 'Michel Stern', 59);
+
+CREATE TABLE hobbies (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person_id INTEGER,
+    name TEXT);
+
+INSERT INTO hobbies (person_id, name)
+VALUES (1, 'Cooking');
+INSERT INTO hobbies (person_id, name)
+VALUES (1, 'Cleaning');
+INSERT INTO hobbies (person_id, name)
+VALUES (2, 'Talking about Paleontology');
+INSERT INTO hobbies (person_id, name)
+VALUES (2, 'Lecturing');
+INSERT INTO hobbies (person_id, name)
+VALUES (3, 'Working in Fashion');
+INSERT INTO hobbies (person_id, name)
+VALUES (3, 'Shopping');
+INSERT INTO hobbies (person_id, name)
+VALUES (4, 'Joking');
+INSERT INTO hobbies (person_id, name)
+VALUES (4, 'Chilling');
+INSERT INTO hobbies (person_id, name)
+VALUES (5, 'Dating');
+INSERT INTO hobbies (person_id, name)
+VALUES (5, 'Eating');
+INSERT INTO hobbies (person_id, name)
+VALUES (6, 'Singing');
+INSERT INTO hobbies (person_id, name)
+VALUES (6, 'Playing guitar');
+
+/*What are some hobbies of the Friends' characters?*/
+SELECT friends.charactername, hobbies.name AS Hobbies
+FROM friends
+LEFT OUTER JOIN hobbies
+ON friends.id = hobbies.person_id;
+
+/*Which Friends' characters dated/married each other? */
+SELECT a.charactername, b.charactername as partnername
+FROM friends as a
+JOIN friends as b
+ON b.partner_id = a.id;
+
+/*Who are the actors of Friends? How old are they now?*/
+SELECT actors.fullname, actors.age, friends.charactername 
+FROM actors
+LEFT OUTER JOIN friends
+ON actors.id = friends.id
+GROUP BY actors.fullname;
